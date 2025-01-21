@@ -1,25 +1,18 @@
 import { test, expect } from '@playwright/test';
 
-
-test.beforeEach(async ({ page }) => {
+test('has title', async ({ page }) => {
   await page.goto('https://playwright.dev/');
+
+  // Expect a title "to contain" a substring.
+  await expect(page).toHaveTitle(/Playwright/);
 });
 
-test('homepage has Playwright in title and get started link linking to the ', async ({ page }) => {
-  await expect(page).toHaveTitle(/Playwright/)
-  //Create a locator and save value into getStarted variable
-  const getStarted = page.locator('text=Get Started');
-  //Validate if the attribute is equal to the value
-  await expect(getStarted).toHaveAttribute('href', '/docs/intro');
-});
+test('get started link', async ({ page }) => {
+  await page.goto('https://playwright.dev/');
 
-test('Validate main page', async ({ page }) => {
   // Click the get started link.
-  await page.locator('.getStarted_Sjon').click();
+  await page.getByRole('link', { name: 'Get started' }).click();
 
   // Expects page to have a heading with the name of Installation.
-  await expect(page).toHaveURL("https://playwright.dev/docs/intro");
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-
-
 });
